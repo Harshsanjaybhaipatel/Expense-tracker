@@ -8,7 +8,19 @@ const expenseForm = document.getElementById('expense-form');
     const saveCategoryBtn = document.getElementById('save-category');
   
     let expenses = [];
-  
+   window.addEventListener('DOMContentLoaded', () => {
+      const stored = localStorage.getItem('expenses');
+      if (stored) {
+        expenses = JSON.parse(stored);
+        renderTable();
+        renderSummary();
+      }
+    
+      // Set today’s date by default
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('date').value = today;
+    });
+
     // Show new category input
     addCategoryBtn.addEventListener('click', () => {
       newCatContainer.style.display = 'block';
@@ -45,6 +57,7 @@ const expenseForm = document.getElementById('expense-form');
   
       const expense = { date, category, amount, note };
       expenses.push(expense);
+        localStorage.setItem('expenses', JSON.stringify(expenses));
   
       renderTable();
       renderSummary();
