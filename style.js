@@ -69,10 +69,9 @@ const expenseForm = document.getElementById('expense-form');
       document.getElementById('date').value = today;
     });
   
-  
-    function renderTable() {
+  function renderTable(data = expenses) {
       expenseTableBody.innerHTML = '';
-      expenses.forEach((exp) => {
+      data.forEach((exp) => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${exp.date}</td>
@@ -83,21 +82,48 @@ const expenseForm = document.getElementById('expense-form');
         expenseTableBody.appendChild(row);
       });
     }
-  
-  
-    function renderSummary() {
+    
+    function renderSummary(data = expenses) {
       const summary = {};
-      expenses.forEach((exp) => {
-        if (!summary[exp.category]) {
-          summary[exp.category] = 0;
-        }
+      data.forEach((exp) => {
+        if (!summary[exp.category]) summary[exp.category] = 0;
         summary[exp.category] += exp.amount;
       });
+    
+      summaryContent.innerHTML = '';
+      for (const [cat, total] of Object.entries(summary)) {
+        const div = document.createElement('div');
+        div.textContent = `${cat}: ₹${total.toFixed(2)}`;
+        summaryContent.appendChild(div);
+      }
+    }
+     document.getElementById('filter-btn').addEventListener('click', () => {
+        const start = document.getElementById('start-date').value;
+        const end = document.getElementById('end-date').value;
+      
+        const filtered = expenses.filter(exp => {
+          return (!start || exp.date >= start) && (!end || exp.date <= end);
+        });
+      
+        renderTable(filtered);
+        renderSummary(filtered);
+      });
+      
+      document.getElementById('reset-btn').addEventListener('click', () => {
+        renderTable();
+        renderSummary();
+        document.getElementById('start-date').value = '';
+        document.getElementById('end-date').value = '';
+      });
+
+
+
   
       summaryContent.innerHTML = '';
       for (const [cat, total] of Object.entries(summary)) {
         const div = document.createElement('div');
         div.textContent = `${cat}: ₹${total.toFixed(2)}`;
         summaryContent.appendChild(div);
+        
       }
     }
