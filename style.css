@@ -163,5 +163,21 @@
     margin-top: 10px;
   }
   
-
+ #filter-section select {
+    padding: 10px 15px;
+    margin: 8px 10px 0 0;
+    border-radius: 10px;
+    border: 1px solid #aadbe6;
+    background: #f8feff;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    font-size: 1rem;
+    color: #055d6d;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
 
