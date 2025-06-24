@@ -30,6 +30,11 @@
       </script>
       
 
+    
+
+    
+    
+      
       <label for="category">Category:</label>
      
   <select id="category" required>
@@ -39,6 +44,7 @@
   </select>
   <button type="button" id="add-category" title="Add new category"> Add New Categories</button>
 </div>
+
 
 
 <div id="new-category-container" style="margin-top: 10px; display: none;">
@@ -56,13 +62,23 @@
       <button type="submit">Add Expense</button>
     </form>
   </section>
- <section id="filter-section">
+
+
+  <section id="filter-section">
     <div id="filter-section">
       <label for="start-date">Start Date:</label>
       <input type="date" id="start-date">
     
       <label for="end-date">End Date:</label>
       <input type="date" id="end-date">
+
+      <label for="filter-category">Category:</label>
+      <select id="filter-category">
+        <option value="">All</option>
+        <option value="Food">Food</option>
+        <option value="Transport">Transport</option>
+        <option value="Entertainment">Entertainment</option>
+      </select>
     
       <div class="button-group">
         <button id="filter-btn">Filter</button>
@@ -91,9 +107,11 @@
   <section id="summary">
     <h2>Summary (Total per Category)</h2>
     <div id="summary-content">
-
     </div>
   </section>
-    <script src="style.js"></script>
+  
+   
+
+  <script src="style.js"></script>
 </body>
 </html>
