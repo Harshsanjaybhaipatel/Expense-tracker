@@ -8,7 +8,8 @@ const expenseForm = document.getElementById('expense-form');
     const saveCategoryBtn = document.getElementById('save-category');
   
     let expenses = [];
-   window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', () => {
+      // Load expenses
       const stored = localStorage.getItem('expenses');
       if (stored) {
         expenses = JSON.parse(stored);
@@ -16,11 +17,25 @@ const expenseForm = document.getElementById('expense-form');
         renderSummary();
       }
     
-      // Set today’s date by default
+      // Load stored custom categories
+      const storedCategories = JSON.parse(localStorage.getItem('customCategories')) || [];
+      storedCategories.forEach(cat => {
+        const option1 = document.createElement('option');
+        option1.value = cat;
+        option1.textContent = cat;
+        categorySelect.appendChild(option1);
+    
+        const option2 = document.createElement('option');
+        option2.value = cat;
+        option2.textContent = cat;
+        document.getElementById('filter-category').appendChild(option2);
+      });
+    
       const today = new Date().toISOString().split('T')[0];
       document.getElementById('date').value = today;
     });
-
+    
+  
     // Show new category input
     addCategoryBtn.addEventListener('click', () => {
       newCatContainer.style.display = 'block';
@@ -35,11 +50,28 @@ const expenseForm = document.getElementById('expense-form');
         option.value = newCategory;
         option.textContent = newCategory;
         categorySelect.appendChild(option);
+    
+        const filterOption = document.createElement('option');
+        filterOption.value = newCategory;
+        filterOption.textContent = newCategory;
+        document.getElementById('filter-category').appendChild(filterOption);
+    
+        // Save to localStorage
+        let storedCategories = JSON.parse(localStorage.getItem('customCategories')) || [];
+        if (!storedCategories.includes(newCategory)) {
+          storedCategories.push(newCategory);
+          localStorage.setItem('customCategories', JSON.stringify(storedCategories));
+        }
+    
         categorySelect.value = newCategory;
         newCatInput.value = '';
         newCatContainer.style.display = 'none';
       }
     });
+    
+    
+    
+    
   
     // Handle form submit
     expenseForm.addEventListener('submit', (e) => {
@@ -57,7 +89,7 @@ const expenseForm = document.getElementById('expense-form');
   
       const expense = { date, category, amount, note };
       expenses.push(expense);
-        localStorage.setItem('expenses', JSON.stringify(expenses));
+      localStorage.setItem('expenses', JSON.stringify(expenses));
   
       renderTable();
       renderSummary();
@@ -69,9 +101,18 @@ const expenseForm = document.getElementById('expense-form');
       document.getElementById('date').value = today;
     });
   
-  function renderTable(data = expenses) {
+  
+    function renderTable() {
       expenseTableBody.innerHTML = '';
-      data.forEach((exp) => {
+      const filterCategory = document.getElementById('filter-category').value;
+      const startDate = document.getElementById('start-date').value;
+      const endDate = document.getElementById('end-date').value;
+    
+      expenses.forEach((exp) => {
+        if (filterCategory && exp.category !== filterCategory) return;
+        if (startDate && exp.date < startDate) return;
+        if (endDate && exp.date > endDate) return;
+    
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${exp.date}</td>
@@ -80,9 +121,11 @@ const expenseForm = document.getElementById('expense-form');
           <td>${exp.note}</td>
         `;
         expenseTableBody.appendChild(row);
+      });}
+      document.getElementById('filter-btn').addEventListener('click', () => {
+        renderTable();
       });
-    }
-    
+          
     function renderSummary(data = expenses) {
       const summary = {};
       data.forEach((exp) => {
@@ -97,27 +140,33 @@ const expenseForm = document.getElementById('expense-form');
         summaryContent.appendChild(div);
       }
     }
-     document.getElementById('filter-btn').addEventListener('click', () => {
+    
+    
+    
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      renderTable();
+      renderSummary();
+      document.getElementById('start-date').value = '';
+      document.getElementById('end-date').value = '';
+    });
+        
+    
+    document.getElementById('filter-btn').addEventListener('click', () => {
         const start = document.getElementById('start-date').value;
         const end = document.getElementById('end-date').value;
-      
-        const filtered = expenses.filter(exp => {
-          return (!start || exp.date >= start) && (!end || exp.date <= end);
+        const filterCategory = document.getElementById('filter-category').value;
+        
+        const filteredExpenses = expenses.filter(exp => {
+          if (start && exp.date < start) return false;
+          if (end && exp.date > end) return false;
+          if (filterCategory && exp.category !== filterCategory) return false;
+          return true;
         });
-      
-        renderTable(filtered);
-        renderSummary(filtered);
+        
+
+
+        renderFilteredTableAndSummary(filteredExpenses);
       });
-      
-      document.getElementById('reset-btn').addEventListener('click', () => {
-        renderTable();
-        renderSummary();
-        document.getElementById('start-date').value = '';
-        document.getElementById('end-date').value = '';
-      });
-
-
-
   
       summaryContent.innerHTML = '';
       for (const [cat, total] of Object.entries(summary)) {
@@ -125,5 +174,14 @@ const expenseForm = document.getElementById('expense-form');
         div.textContent = `${cat}: ₹${total.toFixed(2)}`;
         summaryContent.appendChild(div);
         
+      
+       
+        
       }
-    }
+ 
+     
+     
+       
+     
+      
+    
