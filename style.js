@@ -154,8 +154,8 @@ renderSummary();
     document.getElementById('reset-btn').addEventListener('click', () => {
       document.getElementById('start-date').value = '';
       document.getElementById('end-date').value = '';
-      renderTable(expenses);
-      renderSummary(expenses);
+      renderTable();
+      renderSummary();
     });
         
     
@@ -199,8 +199,8 @@ renderSummary();
         
         document.getElementById('filter-btn').addEventListener('click', () => {
           const filteredExpenses = getFilteredExpenses();
-          renderTable(filteredExpenses);
-          renderSummary(filteredExpenses);
+          renderTable();
+          renderSummary();
         });
         
        
@@ -209,7 +209,4 @@ renderSummary();
  
      
      
-       
-     
-      
-    
+         
