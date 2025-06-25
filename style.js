@@ -13,8 +13,9 @@ const expenseForm = document.getElementById('expense-form');
       const stored = localStorage.getItem('expenses');
       if (stored) {
         expenses = JSON.parse(stored);
-        renderTable();
-        renderSummary();
+        renderTable(expenses);
+renderSummary(expenses);
+
       }
     
       // Load stored custom categories
@@ -91,8 +92,8 @@ const expenseForm = document.getElementById('expense-form');
       expenses.push(expense);
       localStorage.setItem('expenses', JSON.stringify(expenses));
   
-      renderTable();
-      renderSummary();
+      renderTable(filtered);
+      renderSummary(filtered);
   
       expenseForm.reset();
   
@@ -126,28 +127,35 @@ const expenseForm = document.getElementById('expense-form');
         renderTable();
       });
           
-    function renderSummary(data = expenses) {
-      const summary = {};
-      data.forEach((exp) => {
-        if (!summary[exp.category]) summary[exp.category] = 0;
-        summary[exp.category] += exp.amount;
-      });
-    
-      summaryContent.innerHTML = '';
-      for (const [cat, total] of Object.entries(summary)) {
-        const div = document.createElement('div');
-        div.textContent = `${cat}: ₹${total.toFixed(2)}`;
-        summaryContent.appendChild(div);
+      function renderSummary(filteredData = expenses) {
+        const summary = {};
+        let totalAmount = 0;
+      
+        filteredData.forEach(exp => {
+          totalAmount += exp.amount;
+          if (!summary[exp.category]) {
+            summary[exp.category] = 0;
+          }
+          summary[exp.category] += exp.amount;
+        });
+      
+        summaryContent.innerHTML = `<strong>Total: ₹${totalAmount.toFixed(2)}</strong><br><br>`;
+      
+        for (const [category, amount] of Object.entries(summary)) {
+          const div = document.createElement('div');
+          div.textContent = `${category}: ₹${amount.toFixed(2)}`;
+          summaryContent.appendChild(div);
+        }
       }
-    }
+      
     
     
     
     document.getElementById('reset-btn').addEventListener('click', () => {
-      renderTable();
-      renderSummary();
       document.getElementById('start-date').value = '';
       document.getElementById('end-date').value = '';
+      renderTable(expenses);
+      renderSummary(expenses);
     });
         
     
@@ -174,7 +182,27 @@ const expenseForm = document.getElementById('expense-form');
         div.textContent = `${cat}: ₹${total.toFixed(2)}`;
         summaryContent.appendChild(div);
         
-      
+
+
+        function getFilteredExpenses() {
+          const filterCategory = document.getElementById('filter-category').value;
+          const startDate = document.getElementById('start-date').value;
+          const endDate = document.getElementById('end-date').value;
+        
+          return expenses.filter(exp => {
+            if (filterCategory && exp.category !== filterCategory) return false;
+            if (startDate && exp.date < startDate) return false;
+            if (endDate && exp.date > endDate) return false;
+            return true;
+          });
+        }
+        
+        document.getElementById('filter-btn').addEventListener('click', () => {
+          const filteredExpenses = getFilteredExpenses();
+          renderTable(filteredExpenses);
+          renderSummary(filteredExpenses);
+        });
+        
        
         
       }
