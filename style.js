@@ -13,8 +13,8 @@ const expenseForm = document.getElementById('expense-form');
       const stored = localStorage.getItem('expenses');
       if (stored) {
         expenses = JSON.parse(stored);
-        renderTable(expenses);
-renderSummary(expenses);
+        renderTable();
+renderSummary();
 
       }
     
@@ -92,8 +92,8 @@ renderSummary(expenses);
       expenses.push(expense);
       localStorage.setItem('expenses', JSON.stringify(expenses));
   
-      renderTable(filtered);
-      renderSummary(filtered);
+      renderTable();
+      renderSummary();
   
       expenseForm.reset();
   
