@@ -195,10 +195,17 @@ table td {
   background-color: #d94a4a;
 } 
 .table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  position: relative;
 }
+.table-responsive::after {
+  content: '↔';
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  color: #aaa;
+  font-size: 1.2rem;
+}
+
 
 .table-responsive table {
   min-width: 600px; /* Prevents squeezing on small screens */
