@@ -113,6 +113,16 @@ table td {
   text-align: left;
 }
 
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+  min-width: 600px; /* Prevents squeezing on small screens */
+}
+
 #summary-content div {
   background: #d8f8fa;
   padding: 10px;
@@ -194,19 +204,3 @@ table td {
 .delete-btn:hover {
   background-color: #d94a4a;
 } 
-.table-responsive {
-  position: relative;
-}
-.table-responsive::after {
-  content: '↔';
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  color: #aaa;
-  font-size: 1.2rem;
-}
-
-
-.table-responsive table {
-  min-width: 600px; /* Prevents squeezing on small screens */
-}
