@@ -187,3 +187,12 @@ table td {
     width: 100%;
   }
 }
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+  min-width: 600px; /* Prevents squeezing on small screens */
+}
