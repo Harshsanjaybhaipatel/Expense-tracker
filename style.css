@@ -193,3 +193,67 @@ table td {
 .delete-btn:hover {
   background-color: #d94a4a;
 }
+
+
+
+
+
+@media (max-width: 600px) {
+  header, section {
+    padding: 15px 18px;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  form {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  form input,
+  form select,
+  form button {
+    flex: 1 1 100%;
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  #new-category-container {
+    flex-direction: column;
+  }
+
+  table, thead, tbody, th, td {
+    font-size: 14px;
+  }
+
+  table {
+    overflow-x: auto;
+    display: block;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 8px;
+  }
+
+  #filter-section input,
+  #filter-section select,
+  #filter-section button {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .delete-btn {
+    font-size: 0.9rem;
+    padding: 6px;
+    width: 100%;
+  }
+}
