@@ -109,23 +109,48 @@ renderSummary();
       const startDate = document.getElementById('start-date').value;
       const endDate = document.getElementById('end-date').value;
     
-      expenses.forEach((exp) => {
-        if (filterCategory && exp.category !== filterCategory) return;
-        if (startDate && exp.date < startDate) return;
-        if (endDate && exp.date > endDate) return;
+      const filteredExpenses = expenses.filter((exp, index) => {
+        if (filterCategory && exp.category !== filterCategory) return false;
+        if (startDate && exp.date < startDate) return false;
+        if (endDate && exp.date > endDate) return false;
+        return true;
+      });
     
+      if (filteredExpenses.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="5" style="text-align: center; color: grey;">No records found.</td>`;
+        expenseTableBody.appendChild(row);
+        return;
+      }
+    
+      filteredExpenses.forEach((exp, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${exp.date}</td>
           <td>${exp.category}</td>
           <td>₹${exp.amount.toFixed(2)}</td>
           <td>${exp.note}</td>
+          <td><button class="delete-btn" data-index="${expenses.indexOf(exp)}">Delete</button></td>
         `;
         expenseTableBody.appendChild(row);
-      });}
-      document.getElementById('filter-btn').addEventListener('click', () => {
-        renderTable();
       });
+    
+      // Bind delete buttons
+      document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function () {
+          const index = parseInt(this.getAttribute('data-index'));
+          deleteExpense(index);
+        });
+      });
+    }
+
+    function deleteExpense(index) {
+      expenses.splice(index, 1); // Remove from array
+      localStorage.setItem('expenses', JSON.stringify(expenses)); // Update storage
+      renderTable(); // Refresh display
+      renderSummary(); // Update summary
+    }
+    
           
       function renderSummary(filteredData = expenses) {
         const summary = {};
@@ -158,24 +183,21 @@ renderSummary();
       renderSummary();
     });
         
-    
-    document.getElementById('filter-btn').addEventListener('click', () => {
-        const start = document.getElementById('start-date').value;
-        const end = document.getElementById('end-date').value;
-        const filterCategory = document.getElementById('filter-category').value;
-        
-        const filteredExpenses = expenses.filter(exp => {
-          if (start && exp.date < start) return false;
-          if (end && exp.date > end) return false;
-          if (filterCategory && exp.category !== filterCategory) return false;
-          return true;
-        });
-        
+  // Filter Button
+document.getElementById('filter-btn').addEventListener('click', () => {
+  renderTable(); // renderTable already applies filters
+  renderSummary();
+});
 
+// Reset Button
+document.getElementById('reset-btn').addEventListener('click', () => {
+  document.getElementById('filter-category').value = '';
+  document.getElementById('start-date').value = '';
+  document.getElementById('end-date').value = '';
+  renderTable(); // Shows all
+  renderSummary();
+});
 
-        renderFilteredTableAndSummary(filteredExpenses);
-      });
-  
       summaryContent.innerHTML = '';
       for (const [cat, total] of Object.entries(summary)) {
         const div = document.createElement('div');
@@ -206,7 +228,3 @@ renderSummary();
        
         
       }
- 
-     
-     
-         
