@@ -180,3 +180,17 @@
     gap: 10px;
     margin-top: 10px;
   }
+.delete-btn {
+  background-color: #ff5e5e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: #d94a4a;
+}
+
