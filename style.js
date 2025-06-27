@@ -176,12 +176,7 @@ renderSummary();
     
     
     
-    document.getElementById('reset-btn').addEventListener('click', () => {
-      document.getElementById('start-date').value = '';
-      document.getElementById('end-date').value = '';
-      renderTable();
-      renderSummary();
-    });
+ 
         
   // Filter Button
 document.getElementById('filter-btn').addEventListener('click', () => {
@@ -219,12 +214,6 @@ document.getElementById('reset-btn').addEventListener('click', () => {
           });
         }
         
-        document.getElementById('filter-btn').addEventListener('click', () => {
-          const filteredExpenses = getFilteredExpenses();
-          renderTable();
-          renderSummary();
-        });
-        
-       
+     
         
       }
