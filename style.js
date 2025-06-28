@@ -72,13 +72,15 @@ document.getElementById('export-btn').addEventListener('click', () => {
     return;
   }
 
+  alert("Your CSV file is being downloaded.");
+
   const csvRows = [
     ["Date", "Category", "Amount", "Note"],
     ...expenses.map(exp => [
       exp.date,
       exp.category,
       exp.amount,
-      exp.note.replace(/"/g, '""')  // escape double quotes
+      exp.note.replace(/"/g, '""')
     ])
   ];
 
@@ -87,17 +89,13 @@ document.getElementById('export-btn').addEventListener('click', () => {
   ).join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv' });
-
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = 'expenses.csv';
-
-  // iOS Safari fix: must add link to body
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
 });
-
 
 // Table Renderer
 function renderTable(data = expenses) {
