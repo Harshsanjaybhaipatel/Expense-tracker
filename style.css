@@ -247,23 +247,15 @@ input:invalid:focus {
   outline-color: red;
 }
 #export-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
   background-color: #01a3b3;
   color: white;
-  padding: 16px 24px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  padding: 10px 15px;
   border: none;
-  border-radius: 50px;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
-  transition: background 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
 }
 
 #export-btn:hover {
   background-color: #01788f;
-  transform: scale(1.05);
 }
