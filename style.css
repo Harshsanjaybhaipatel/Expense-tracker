@@ -239,3 +239,31 @@ table td {
     width: 100%;
   }
 }
+input:invalid {
+  border-color: red;
+}
+
+input:invalid:focus {
+  outline-color: red;
+}
+#export-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #01a3b3;
+  color: white;
+  padding: 16px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#export-btn:hover {
+  background-color: #01788f;
+  transform: scale(1.05);
+}
