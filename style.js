@@ -71,11 +71,22 @@ expenseForm.addEventListener('submit', (e) => {
 
   const date = document.getElementById('date').value;
   const category = categorySelect.value;
-  const amount = parseFloat(document.getElementById('amount').value);
+  const amountInput = document.getElementById('amount');
+  const amount = parseFloat(amountInput.value);
   const note = document.getElementById('note').value;
 
+  // Clear previous error styles
+  amountInput.style.borderColor = '';
+  let errorMessage = '';
+
   if (!date || !category || isNaN(amount)) {
-    alert('Please fill in all required fields');
+    if (isNaN(amount)) {
+      amountInput.style.borderColor = 'red';
+      errorMessage = 'Amount must be a valid number.';
+    } else {
+      errorMessage = 'Please fill in all required fields.';
+    }
+    alert(errorMessage);
     return;
   }
 
@@ -85,9 +96,11 @@ expenseForm.addEventListener('submit', (e) => {
 
   renderTable();
   renderSummary();
+
   expenseForm.reset();
   document.getElementById('date').value = new Date().toISOString().split('T')[0];
 });
+
 
 // Table Renderer
 function renderTable(data = expenses) {
@@ -214,4 +227,26 @@ document.getElementById('reset-btn').addEventListener('click', () => {
   document.getElementById('end-date').value = '';
   renderTable();
   renderSummary();
+});
+document.getElementById('export-btn').addEventListener('click', () => {
+  if (expenses.length === 0) {
+    alert('No data to export!');
+    return;
+  }
+
+  let csvContent = "data:text/csv;charset=utf-8,";
+  csvContent += "Date,Category,Amount,Note\n"; // CSV headers
+
+  expenses.forEach(exp => {
+    const row = [exp.date, exp.category, exp.amount, `"${exp.note.replace(/"/g, '""')}"`];
+    csvContent += row.join(",") + "\n";
+  });
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "expenses.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 });
