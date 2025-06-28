@@ -66,39 +66,36 @@ saveCategoryBtn.addEventListener('click', () => {
 });
 
 // Form Submit
-expenseForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const date = document.getElementById('date').value;
-  const category = categorySelect.value;
-  const amountInput = document.getElementById('amount');
-  const amount = parseFloat(amountInput.value);
-  const note = document.getElementById('note').value;
-
-  // Clear previous error styles
-  amountInput.style.borderColor = '';
-  let errorMessage = '';
-
-  if (!date || !category || isNaN(amount)) {
-    if (isNaN(amount)) {
-      amountInput.style.borderColor = 'red';
-      errorMessage = 'Amount must be a valid number.';
-    } else {
-      errorMessage = 'Please fill in all required fields.';
-    }
-    alert(errorMessage);
+document.getElementById('export-btn').addEventListener('click', () => {
+  if (expenses.length === 0) {
+    alert("No expenses to export.");
     return;
   }
 
-  const expense = { date, category, amount, note };
-  expenses.push(expense);
-  localStorage.setItem('expenses', JSON.stringify(expenses));
+  const csvRows = [
+    ["Date", "Category", "Amount", "Note"],
+    ...expenses.map(exp => [
+      exp.date,
+      exp.category,
+      exp.amount,
+      exp.note.replace(/"/g, '""')  // escape double quotes
+    ])
+  ];
 
-  renderTable();
-  renderSummary();
+  const csvContent = csvRows.map(row => 
+    row.map(item => `"${item}"`).join(',')
+  ).join('\n');
 
-  expenseForm.reset();
-  document.getElementById('date').value = new Date().toISOString().split('T')[0];
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'expenses.csv';
+
+  // iOS Safari fix: must add link to body
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 });
 
 
